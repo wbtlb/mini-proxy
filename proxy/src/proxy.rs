@@ -12,4 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod config;
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct ProxiesConfig {
+    pub configs: Option<Vec<ProxyConfig>>,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct ProxyConfig {
+    pub listen_addr: String,
+    pub username: String,
+    pub password: String,
+    pub db: String,
+    pub backend_type: String,
+}

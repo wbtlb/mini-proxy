@@ -12,4 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod config;
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct MySQLNodes {
+    pub nodes: Option<Vec<MySQLNode>>,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct MySQLNode {
+    pub name: String,
+    pub db: String,
+    pub user: String,
+    pub password: String,
+    pub addr: String,
+}

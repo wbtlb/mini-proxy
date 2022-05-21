@@ -6,6 +6,8 @@ members = [
     "cmd/mini-proxy",
     "protocol/mysql",
     "runtime/mysql",
+    "proxy",
+    "proxy/mysql",
 ]
 
 default-members = ["cmd/mini-proxy"]
