@@ -1,0 +1,16 @@
+[workspace]
+
+resolver = "2"
+members = [
+    "app/config",
+    "cmd/mini-proxy",
+    "protocol/mysql",
+    "runtime/mysql",
+]
+
+default-members = ["cmd/mini-proxy"]
+
+[profile.release]
+debug = 1
+lto = "on"
+opt-level = 3

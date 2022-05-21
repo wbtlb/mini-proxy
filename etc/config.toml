@@ -1,0 +1,18 @@
+[admin]
+log_level = "INFO"
+
+[proxy]
+[[proxy.configs]]
+listen_addr = "0.0.0.0:9088"
+user = "root"
+password = "12345678"
+db = "mixer"
+backend_type = "mysql"
+nodes = ["node001"]
+
+[upstream]
+[[upstream.mysql.nodes]]
+name = "node001"
+user = "root"
+password = "12345678"
+db = "mixer"
