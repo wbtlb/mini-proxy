@@ -1,7 +1,7 @@
 // Copyright 2022 Database Mesh Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
+// you may not use this file except in compliance with the License.ro
 // You may obtain a copy of the License at
 //
 //     http://www.apache.org/licenses/LICENSE-2.0
@@ -39,6 +39,10 @@ pub struct MiniProxyConfig {
 }
 
 impl MiniProxyConfig {
+    pub fn get_proxies(&self) -> &Vec<ProxyConfig> {
+        &self.proxies
+    }
+
     pub fn load_config() -> Self {
         let matches = Command::new("Pisa-Proxy")
             .arg(Arg::new("port").short('p').long("port").help("Http port").takes_value(true))

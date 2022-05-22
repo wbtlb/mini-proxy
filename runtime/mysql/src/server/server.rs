@@ -12,6 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod factory;
-pub mod listener;
-pub mod proxy;
+use bytes::{Buf, BufMut, BytesMut};
+use tokio::{io::AsyncWriteExt, net::TcpStream, sync::Mutex};
+
+pub struct MySqlServer {
+    // pub client: Connection,
+    pub buf: BytesMut,
+    is_quit: bool,
+}
+
+impl MySqlServer {
+    pub async fn new(client: TcpStream) -> MySqlServer {
+        MySqlServer { buf: BytesMut::with_capacity(8192), is_quit: false }
+    }
+}

@@ -1,0 +1,9 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+config = {path = "../config"}
+proxy = {path = "../../proxy"}
+runtime_mysql = {path = "../../runtime/mysql"}

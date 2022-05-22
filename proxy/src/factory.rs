@@ -12,5 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[derive(Debug, Deserialize)]
-pub struct MysqlNode {}
+use std::io::Error;
+
+pub enum ProxyKind {
+    MySQL,
+}
+
+#[async_trait::async_trait]
+pub trait Proxy {
+    async fn start(&mut self) -> Result<(), Error>;
+}
+
+pub trait Factory {
+    fn make_proxy(&self, kind: ProxyKind) -> Box<dyn Proxy + Send>;
+}

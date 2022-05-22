@@ -12,7 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use proxy_mysql::proxy::MySQLNode;
 use serde::Deserialize;
+use tokio::{
+    net::{TcpListener, TcpStream},
+    sync::Mutex,
+};
+
+use crate::listener::listener::Listener;
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct ProxiesConfig {
@@ -26,4 +33,20 @@ pub struct ProxyConfig {
     pub password: String,
     pub db: String,
     pub backend_type: String,
+}
+
+pub struct Proxy {
+    pub listener: Listener,
+    pub app: ProxyConfig,
+    pub backend_nodes: Vec<MySQLNode>,
+}
+
+impl Proxy {
+    pub fn build_listener(&mut self) -> Result<TcpListener, std::io::Error> {
+        self.listener.build_listener()
+    }
+
+    pub async fn accept(&mut self, listener: &TcpListener) -> Result<TcpStream, std::io::Error> {
+        self.listener.accept(listener).await
+    }
 }

@@ -3,6 +3,7 @@
 resolver = "2"
 members = [
     "app/config",
+    "app/server",
     "cmd/mini-proxy",
     "protocol/mysql",
     "runtime/mysql",

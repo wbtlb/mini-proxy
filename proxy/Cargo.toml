@@ -4,5 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tokio = { version = "1.0.0", features = ["full", "tracing"] }
+tokio-util = { version = "0.7.0", features = ["full"] }
 serde = { version = "1.0.133", default-features = false, features = ["derive"] }
+tracing = "0.1.13"
 serde_derive = "1.0"
+async-trait = "0.1"
+proxy_mysql = {path = "./mysql"}

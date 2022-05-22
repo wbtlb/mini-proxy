@@ -4,4 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tokio = { version = "1.0.0", features = ["full", "tracing"] }
+tokio-util = { version = "0.6.7", features = ["full"] }
+tokio-stream = { version = "0.1" }
+num_cpus = "1.0"
+tracing = "0.1.13"
+tracing-futures = { version = "0.2.3" }
+tracing-subscriber = "0.2.2"
 config = {path = "../../app/config"}
+server = {path = "../../app/server"}
+proxy = {path = "../../proxy"}
