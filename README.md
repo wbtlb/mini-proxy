@@ -5,4 +5,4 @@ The intent of this project is to provide a example of writing a Database protoco
 
 ## futures
 - [ ] mysql protocol support
-- [ ] mysql proxy
+- [x] mysql proxy
