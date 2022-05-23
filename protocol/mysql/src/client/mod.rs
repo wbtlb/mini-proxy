@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod charset;
-pub mod client;
+pub mod auth;
 pub mod err;
-pub mod mysql_const;
-pub mod server;
-pub mod util;
+pub mod stmt;
 
-#[macro_use]
-extern crate lazy_static;
+pub mod codec;
+pub mod conn;
+mod resultset;
+pub mod stream;

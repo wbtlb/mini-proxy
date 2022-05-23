@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::{io::Error, sync::Arc};
+use std::io::Error;
 
+use conn_pool::conn_pool::Pool;
 use proxy::{
     listener::listener::Listener,
     proxy::{Proxy, ProxyConfig},
@@ -44,22 +45,26 @@ impl proxy::factory::Proxy for MySQLProxy {
 
         let l = proxy.build_listener().unwrap();
 
+        let pool = Pool::new(self.proxy_config.pool_size as usize);
+
         loop {
             let socket = proxy.accept(&l).await.unwrap();
             let pcfg = self.proxy_config.clone();
+            let pool = pool.clone();
 
-            let mut mysql_server = MySqlServer::new(socket).await;
+            let mut mysql_server =
+                MySqlServer::new(socket, pool, pcfg, self.mysql_nodes.clone()).await;
 
-            // if let Err(err) = m.handshake().await {
-            //     error!("{:?}", err);
-            //     continue;
-            // }
+            if let Err(err) = mysql_server.handshake().await {
+                error!("{:?}", err);
+                continue;
+            }
 
-            // tokio::spawn(async move {
-            //     if let Err(err) = m.run().await {
-            //         error!("{:?}", err);
-            //     }
-            // });
+            tokio::spawn(async move {
+                if let Err(err) = mysql_server.run().await {
+                    error!("{:?}", err);
+                }
+            });
         }
     }
 }

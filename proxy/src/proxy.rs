@@ -14,10 +14,7 @@
 
 use proxy_mysql::proxy::MySQLNode;
 use serde::Deserialize;
-use tokio::{
-    net::{TcpListener, TcpStream},
-    sync::Mutex,
-};
+use tokio::net::{TcpListener, TcpStream};
 
 use crate::listener::listener::Listener;
 
@@ -29,6 +26,7 @@ pub struct ProxiesConfig {
 #[derive(Debug, Deserialize, Clone)]
 pub struct ProxyConfig {
     pub listen_addr: String,
+    pub pool_size: u32,
     pub username: String,
     pub password: String,
     pub db: String,

@@ -11,5 +11,10 @@ tokio = { version = "1.0.0", features = ["full", "tracing"] }
 tokio-util = { version = "0.6.7", features = ["full"] }
 tokio-stream = { version = "0.1" }
 bytes = "1"
+byteorder = "0.5.3"
+futures = "0.3.5"
 proxy = {path = "../../proxy"}
 proxy_mysql = {path = "../../proxy/mysql"}
+mini_proxy_error = {path = "../../error"}
+mysql_protocol = {path = "../../protocol/mysql"}
+conn_pool = { path = "../../proxy/pool"}

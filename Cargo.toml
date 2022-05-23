@@ -5,10 +5,12 @@ members = [
     "app/config",
     "app/server",
     "cmd/mini-proxy",
+    "error",
     "protocol/mysql",
     "runtime/mysql",
     "proxy",
     "proxy/mysql",
+    "proxy/pool"
 ]
 
 default-members = ["cmd/mini-proxy"]

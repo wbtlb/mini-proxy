@@ -12,12 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod charset;
-pub mod client;
-pub mod err;
-pub mod mysql_const;
-pub mod server;
-pub mod util;
+use std::fmt;
 
-#[macro_use]
-extern crate lazy_static;
+#[derive(Debug)]
+pub struct MySQLError {
+    pub code: u16,
+    pub state: Vec<u8>,
+    pub msg: String,
+}
+
+impl MySQLError {
+    pub fn new(code: u16, state: Vec<u8>, msg: String) -> MySQLError {
+        MySQLError { code, state, msg }
+    }
+}
+
+impl fmt::Display for MySQLError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.msg)
+    }
+}
