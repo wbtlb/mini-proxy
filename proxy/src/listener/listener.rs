@@ -45,7 +45,7 @@ impl Listener {
             Err(err) => return Err(err),
         };
 
-        info!("[pisa] client_ip: {:?} - backend_type: {:?}", addr.ip(), self.backend_type);
+        info!("[mini-proxy] client_ip: {:?} - backend_type: {:?}", addr.ip(), self.backend_type);
 
         socket.set_nodelay(true).unwrap();
         Ok(socket)

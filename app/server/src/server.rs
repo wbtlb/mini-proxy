@@ -20,12 +20,12 @@ use proxy::{
 
 pub struct SimpleFactory {
     pub proxy_config: ProxyConfig,
-    pub pisa_config: MiniProxyConfig,
+    pub mini_proxy_config: MiniProxyConfig,
 }
 
 impl SimpleFactory {
-    pub fn new(proxy_config: ProxyConfig, pisa_config: MiniProxyConfig) -> Self {
-        Self { proxy_config, pisa_config }
+    pub fn new(proxy_config: ProxyConfig, mini_proxy_config: MiniProxyConfig) -> Self {
+        Self { proxy_config, mini_proxy_config }
     }
 }
 
@@ -35,7 +35,7 @@ impl Factory for SimpleFactory {
         match kind {
             ProxyKind::MySQL => Box::new(runtime_mysql::mysql::MySQLProxy {
                 proxy_config: config,
-                mysql_nodes: self.pisa_config.mysql_nodes.clone(),
+                mysql_nodes: self.mini_proxy_config.mysql_nodes.clone(),
             }),
         }
     }

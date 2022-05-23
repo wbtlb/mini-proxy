@@ -51,17 +51,17 @@ pub fn build_runtime() -> Runtime {
     let num_cpus = num_cpus::get();
     match num_cpus {
         0 | 1 => {
-            info!("pisa-proxy running on current thread");
+            info!("mini-proxy running on current thread");
             Builder::new_current_thread()
-                .thread_name("pisa-proxy")
+                .thread_name("mini-proxy")
                 .enable_all()
                 .build()
                 .expect("failed to build runtime")
         }
         num_cpus => {
-            info!("pisa-proxy running on multi thread");
+            info!("mini-proxy running on multi thread");
             Builder::new_multi_thread()
-                .thread_name("pisa-proxy")
+                .thread_name("mini-proxy")
                 .worker_threads(num_cpus)
                 .max_blocking_threads(num_cpus)
                 .enable_all()

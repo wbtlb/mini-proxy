@@ -32,7 +32,7 @@ use crate::server::tls::make_pkcs12;
 lazy_static! {
     static ref TLS_ACCEPTOR: tokio_native_tls::TlsAcceptor = {
         let chain = make_pkcs12();
-        let identity = Identity::from_pkcs12(&chain.2, "pisa-proxy").unwrap();
+        let identity = Identity::from_pkcs12(&chain.2, "mini-proxy").unwrap();
         tokio_native_tls::TlsAcceptor::from(TlsAcceptor::new(identity).unwrap())
     };
 }

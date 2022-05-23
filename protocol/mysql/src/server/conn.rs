@@ -26,7 +26,7 @@ use super::{err::MySQLError, stream::LocalStream};
 use crate::{charset::*, err, err::ProtocolError, mysql_const::*, server::packet::Packet, util::*};
 
 // server version start with version， regex is ^(\d{1,2})\.(\d{1,2})\.(\d{1,3})
-const SERVER_VERSION: &str = "5.7.37 pisa 0.1.0";
+const SERVER_VERSION: &str = "5.7.37 mini-proxy 0.1.0";
 
 lazy_static! {
     static ref CONNECTION_ID: AtomicU32 = AtomicU32::new(0);
