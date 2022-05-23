@@ -16,7 +16,7 @@ cargo build --release
 ```
 ### 2. startup
 ```
-./target/debug/mini-proxy --config etc/config.toml
+./target/release/mini-proxy --config etc/config.toml
 ```
 
 ### 3. configration
