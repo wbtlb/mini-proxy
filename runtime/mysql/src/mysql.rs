@@ -43,12 +43,12 @@ impl proxy::factory::Proxy for MySQLProxy {
             backend_nodes: self.mysql_nodes.clone(),
         };
 
-        let l = proxy.build_listener().unwrap();
+        let listener = proxy.build_listener().unwrap();
 
         let pool = Pool::new(self.proxy_config.pool_size as usize);
 
         loop {
-            let socket = proxy.accept(&l).await.unwrap();
+            let socket = proxy.accept(&listener).await.unwrap();
             let pcfg = self.proxy_config.clone();
             let pool = pool.clone();
 
