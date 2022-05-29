@@ -19,53 +19,54 @@ use proxy::{
     listener::listener::Listener,
     proxy::{Proxy, ProxyConfig},
 };
-use proxy_mysql::proxy::MySQLNode;
 use proxy::proxy::BackendNodeType;
+
+use proxy_postgresql::proxy::PostgresqlNode;
 use tracing::error;
 
-use crate::server::server::MySqlServer;
+// use crate::server::server::MySqlServer;
 
-pub struct MySQLProxy {
+pub struct PostgresqlProxy {
     pub proxy_config: ProxyConfig,
-    pub mysql_nodes: Vec<MySQLNode>,
+    pub postgresql_nodes: Vec<PostgresqlNode>,
 }
 
 #[async_trait::async_trait]
-impl proxy::factory::Proxy for MySQLProxy {
+impl proxy::factory::Proxy for PostgresqlProxy {
     async fn start(&mut self) -> Result<(), Error> {
         let listener = Listener {
-            backend_type: "mysql".to_string(),
+            backend_type: "postgresql".to_string(),
             listen_addr: self.proxy_config.listen_addr.clone(),
         };
 
         let mut proxy = Proxy {
             listener,
             app: self.proxy_config.clone(),
-            backend_nodes: BackendNodeType::MySQL(self.mysql_nodes.clone()),
+            backend_nodes: BackendNodeType::Postgresql(self.postgresql_nodes.clone()),
         };
 
         let listener = proxy.build_listener().unwrap();
 
-        let pool = Pool::new(self.proxy_config.pool_size as usize);
+        // let pool = Pool::new(self.proxy_config.pool_size as usize);
 
         loop {
-            let socket = proxy.accept(&listener).await.unwrap();
-            let pcfg = self.proxy_config.clone();
-            let pool = pool.clone();
+            // let socket = proxy.accept(&listener).await.unwrap();
+            // let pcfg = self.proxy_config.clone();
+            // let pool = pool.clone();
 
-            let mut mysql_server =
-                MySqlServer::new(socket, pool, pcfg, self.mysql_nodes.clone()).await;
+            // let mut mysql_server =
+            //     MySqlServer::new(socket, pool, pcfg, self.mysql_nodes.clone()).await;
 
-            if let Err(err) = mysql_server.handshake().await {
-                error!("{:?}", err);
-                continue;
-            }
+            // if let Err(err) = mysql_server.handshake().await {
+            //     error!("{:?}", err);
+            //     continue;
+            // }
 
-            tokio::spawn(async move {
-                if let Err(err) = mysql_server.run().await {
-                    error!("{:?}", err);
-                }
-            });
+            // tokio::spawn(async move {
+            //     if let Err(err) = mysql_server.run().await {
+            //         error!("{:?}", err);
+            //     }
+            // });
         }
     }
 }

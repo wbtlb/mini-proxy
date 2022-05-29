@@ -17,6 +17,7 @@ use std::{fs::File, io::prelude::*};
 use clap::{Arg, Command};
 use proxy::proxy::{ProxiesConfig, ProxyConfig};
 use proxy_mysql::proxy::{MySQLNode, MySQLNodes};
+use proxy_postgresql::proxy::{PostgresqlNode};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -36,6 +37,7 @@ pub struct MiniProxyConfig {
     pub admin: Admin,
     pub proxies: Vec<ProxyConfig>,
     pub mysql_nodes: Vec<MySQLNode>,
+    pub postgresql_nodes: Vec<PostgresqlNode>,
 }
 
 impl MiniProxyConfig {
@@ -70,7 +72,7 @@ impl MiniProxyConfig {
         config = toml::from_str(&config_str).unwrap();
 
         let mut mini_proxy_config =
-            MiniProxyConfig { admin: config.admin, proxies: vec![], mysql_nodes: vec![] };
+            MiniProxyConfig { admin: config.admin, proxies: vec![], mysql_nodes: vec![], postgresql_nodes: vec![] };
 
         if let Some(config) = config.proxy {
             if let Some(app_config) = config.configs {

@@ -8,10 +8,18 @@ pool_size = 10
 username = "root"
 password = "12345678"
 db = "test"
-backend_type = "mysql"
+backend_type = "postgresql"
 
 [mysql]
 [[mysql.nodes]]
+name = "node001"
+user = "root"
+password = "12345678"
+addr = "127.0.0.1:3306"
+db = "test"
+
+[postgresql]
+[[postgresql.nodes]]
 name = "node001"
 user = "root"
 password = "12345678"
