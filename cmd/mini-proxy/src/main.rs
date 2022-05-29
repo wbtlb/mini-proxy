@@ -36,6 +36,9 @@ fn main() {
                 "mysql" => servers.push(tokio::spawn(server::server::new_proxy_server(
                     factory.make_proxy(proxy::factory::ProxyKind::MySQL),
                 ))),
+                "postgresql" => servers.push(tokio::spawn(server::server::new_proxy_server (
+                    factory.make_proxy(proxy::factory::ProxyKind::Postgresql),
+                ))),
                 &_ => {}
             }
         }

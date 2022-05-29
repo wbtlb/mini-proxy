@@ -7,3 +7,4 @@ edition = "2021"
 config = {path = "../config"}
 proxy = {path = "../../proxy"}
 runtime_mysql = {path = "../../runtime/mysql"}
+runtime_postgresql = {path = "../../runtime/postgresql"}

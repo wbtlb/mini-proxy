@@ -11,3 +11,4 @@ tracing = "0.1.13"
 serde_derive = "1.0"
 async-trait = "0.1"
 proxy_mysql = {path = "./mysql"}
+proxy_postgresql = {path = "./postgresql"}

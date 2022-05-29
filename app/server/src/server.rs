@@ -37,6 +37,10 @@ impl Factory for SimpleFactory {
                 proxy_config: config,
                 mysql_nodes: self.mini_proxy_config.mysql_nodes.clone(),
             }),
+            ProxyKind::Postgresql => Box::new(runtime_postgresql::postgresql::PostgresqlProxy {
+                proxy_config: config,
+                postgresql_nodes: self.mini_proxy_config.postgresql_nodes.clone(),
+            }),
         }
     }
 }

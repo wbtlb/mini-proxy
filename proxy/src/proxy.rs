@@ -13,6 +13,7 @@
 // limitations under the License.
 
 use proxy_mysql::proxy::MySQLNode;
+use proxy_postgresql::proxy::PostgresqlNode;
 use serde::Deserialize;
 use tokio::net::{TcpListener, TcpStream};
 
@@ -33,10 +34,16 @@ pub struct ProxyConfig {
     pub backend_type: String,
 }
 
+pub enum BackendNodeType {
+    MySQL(Vec::<MySQLNode>),
+    Postgresql(Vec::<PostgresqlNode>),
+}
+
 pub struct Proxy {
     pub listener: Listener,
     pub app: ProxyConfig,
-    pub backend_nodes: Vec<MySQLNode>,
+    pub backend_nodes: BackendNodeType,
+    // pub postgresql_nodes: Vec<PostgresqlNode>,
 }
 
 impl Proxy {
