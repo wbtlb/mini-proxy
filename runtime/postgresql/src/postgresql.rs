@@ -23,6 +23,7 @@ use proxy::proxy::BackendNodeType;
 
 use proxy_postgresql::proxy::PostgresqlNode;
 use tracing::error;
+use crate::postgresql::server::PostgresqlServer;
 
 // use crate::server::server::MySqlServer;
 
@@ -47,16 +48,14 @@ impl proxy::factory::Proxy for PostgresqlProxy {
 
         let listener = proxy.build_listener().unwrap();
 
-        // let pool = Pool::new(self.proxy_config.pool_size as usize);
-
         loop {
-            // let socket = proxy.accept(&listener).await.unwrap();
+            let socket = proxy.accept(&listener).await.unwrap();
             // let pcfg = self.proxy_config.clone();
-            // let pool = pool.clone();
 
             // let mut mysql_server =
             //     MySqlServer::new(socket, pool, pcfg, self.mysql_nodes.clone()).await;
 
+            let mut postgresql_server = PostgresqlServer::new(socket);
             // if let Err(err) = mysql_server.handshake().await {
             //     error!("{:?}", err);
             //     continue;
