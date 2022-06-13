@@ -1,4 +1,4 @@
-// Copyright 2022 Database Mesh Authors
+// Copyright 2022 SphereEx Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ impl Default for DecodeResultsetState {
     }
 }
 
+/// Parse `COM_QUERY` Response.
 #[derive(Debug, Default)]
 pub struct ResultsetCodec {
     pub next_state: DecodeResultsetState,
@@ -157,6 +158,7 @@ impl ResultsetCodec {
     }
 }
 
+/// Implements `Decoder` trait
 impl Decoder for ResultsetCodec {
     type Item = (BytesMut, bool);
     type Error = ProtocolError;
@@ -194,8 +196,6 @@ pub enum ResultSendCommand<'a> {
     Binary((u8, &'a [u8])),
 }
 
-//type SendCommand<'a> = (u8, &'a str);
-
 impl<'a> Encoder<ResultSendCommand<'a>> for ResultsetCodec {
     type Error = ProtocolError;
 
@@ -223,10 +223,6 @@ pub fn write_command_binary(item: (u8, &[u8]), dst: &mut BytesMut) {
     dst.put_u8(0);
     dst.put_u8(item.0);
     dst.extend_from_slice(item.1);
-}
-
-pub trait BufMutExt: BufMut {
-    fn parse_column_info(&mut self) {}
 }
 
 #[cfg(test)]

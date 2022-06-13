@@ -17,13 +17,12 @@ use std::io::Error;
 use conn_pool::conn_pool::Pool;
 use proxy::{
     listener::listener::Listener,
-    proxy::{Proxy, ProxyConfig},
+    proxy::{BackendNodeType, Proxy, ProxyConfig},
 };
 use proxy_mysql::proxy::MySQLNode;
-use proxy::proxy::BackendNodeType;
 use tracing::error;
 
-use crate::server::server::MySqlServer;
+use crate::server::MySqlServer;
 
 pub struct MySQLProxy {
     pub proxy_config: ProxyConfig,
