@@ -1,4 +1,4 @@
-// Copyright 2022 Database Mesh Authors
+// Copyright 2022 SphereEx Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -116,14 +116,24 @@ impl ClientConn {
         stmt_codec.send((COM_STMT_PREPARE, val)).await?;
 
         loop {
+            // Decode prepare complete
+            if stmt_codec.codec().is_complete() {
+                break;
+            }
+
             match stmt_codec.next().await {
-                Some(Ok(data)) => {
-                    if data.is_none() {
-                        break;
+                Some(Ok(None)) => {}
+
+                Some(Ok(Some(data))) => {
+                    // If data.len() > 0, means that `Prepare` return error.
+                    if !data.is_empty() {
+                        self.framed = Some(Box::new(ClientCodec::Stmt(stmt_codec)));
+                        return Err(ProtocolError::PrepareError(data.to_vec()));
                     }
                 }
 
                 Some(Err(e)) => {
+                    self.framed = Some(Box::new(ClientCodec::Stmt(stmt_codec)));
                     return Err(e);
                 }
 
@@ -132,7 +142,6 @@ impl ClientConn {
         }
 
         let stmt = stmt_codec.codec().clone();
-
         self.framed = Some(Box::new(ClientCodec::Stmt(stmt_codec)));
 
         Ok(stmt)
@@ -181,7 +190,7 @@ impl ClientConn {
         res
     }
 
-    // send PING, QUIT,etc... command
+    // Send PING, QUIT,etc... command
     pub async fn send_common_command<'a>(
         &'a mut self,
         code: u8,
@@ -195,6 +204,10 @@ impl ClientConn {
         self.framed = Some(Box::new(ClientCodec::Common(common_codec)));
 
         Ok(CommonStream::new(self.framed.as_mut()))
+    }
+
+    pub fn get_endpoint(&self) -> Option<String> {
+        Some(self.endpoint.clone())
     }
 }
 
@@ -210,6 +223,7 @@ impl Clone for ClientConn {
     }
 }
 
+/// Implements `ConnLike` trait
 #[async_trait]
 impl ConnLike for ClientConn {
     type Error = ProtocolError;
@@ -219,6 +233,7 @@ impl ConnLike for ClientConn {
     }
 }
 
+/// Implements `ConnAttr` trait
 impl ConnAttr for ClientConn {
     fn get_host(&self) -> String {
         let sock_addr: SocketAddr = self.endpoint.parse().unwrap();
@@ -237,55 +252,67 @@ impl ConnAttr for ClientConn {
     fn get_endpoint(&self) -> String {
         self.endpoint.clone()
     }
+
+    fn get_db(&self) -> Option<String> {
+        if let Some(auth_info) = &self.auth_info {
+            if auth_info.db.is_empty() {
+                None
+            } else {
+                Some(auth_info.db.clone())
+            }
+        } else {
+            None
+        }
+    }
 }
 
-// #[cfg(test)]
-// mod test {
-//     use conn_pool::*;
-//     use tokio_stream::StreamExt;
+#[cfg(test)]
+mod test {
+    use conn_pool::*;
+    use tokio_stream::StreamExt;
 
-//     use crate::{client::conn::ClientConn, err::ProtocolError};
+    use crate::{client::conn::ClientConn, err::ProtocolError};
 
-//     #[tokio::test]
-//     async fn pool() {
-//         let user = "root".to_string();
-//         let password = "123456".to_string();
-//         let addr = "127.0.0.1:13306".to_string();
+    #[tokio::test]
+    async fn pool() {
+        let user = "root".to_string();
+        let password = "123456".to_string();
+        let addr = "127.0.0.1:13306".to_string();
 
-//         let conn = ClientConn::with_opts(user, password, addr);
+        let conn = ClientConn::with_opts(user, password, addr);
 
-//         let mut pool = Pool::new(3);
-//         pool.set_factory(conn);
+        let mut pool = Pool::new(3);
+        pool.set_factory(conn);
 
-//         assert_eq!(0, pool.len());
+        assert_eq!(0, pool.len());
 
-//         {
-//             let mut conn = pool.get_conn().await.unwrap();
-//             let res = conn.send_query("show databases".as_bytes()).await;
-//             let mut res = res.unwrap();
-//             loop {
-//                 match res.next().await {
-//                     Some(data) => match data {
-//                         Ok(data) => {
-//                             println!("{:?}", data);
-//                         }
+        {
+            let mut conn = pool.get_conn().await.unwrap();
+            let res = conn.send_query("show databases".as_bytes()).await;
+            let mut res = res.unwrap();
+            loop {
+                match res.next().await {
+                    Some(data) => match data {
+                        Ok(data) => {
+                            println!("{:?}", data);
+                        }
 
-//                         Err(e) => {
-//                             if let ProtocolError::PacketError(data) = e {
-//                                 println!("{:?}", String::from_utf8_lossy(&data));
-//                                 break;
-//                             }
-//                         }
-//                     },
-//                     _ => break,
-//                 }
-//             }
+                        Err(e) => {
+                            if let ProtocolError::PacketError(data) = e {
+                                println!("{:?}", String::from_utf8_lossy(&data));
+                                break;
+                            }
+                        }
+                    },
+                    _ => break,
+                }
+            }
 
-//             assert_eq!("127.0.0.1", &conn.get_host());
-//             assert_eq!(13306, conn.get_port());
-//             assert_eq!("root", &conn.get_user());
-//         }
+            assert_eq!("127.0.0.1", &conn.get_host());
+            assert_eq!(13306, conn.get_port());
+            assert_eq!("root", &conn.get_user());
+        }
 
-//         assert_eq!(1, pool.len());
-//     }
-// }
+        assert_eq!(1, pool.len());
+    }
+}

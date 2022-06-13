@@ -1,4 +1,4 @@
-// Copyright 2022 Database Mesh Authors
+// Copyright 2022 SphereEx Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ use tokio_util::codec::{Decoder, Encoder, Framed};
 use super::{codec::ClientCodec, stream::LocalStream};
 use crate::{charset::DEFAULT_COLLATION_ID, err::ProtocolError, mysql_const::*, util::*};
 
+/// Handshake state
 #[derive(Debug, Clone)]
 pub enum HandshakeState {
     InitialHandshake,
@@ -80,6 +81,7 @@ impl ClientAuth {
         }
     }
 
+    // Read initial handshake packet from server
     fn read_initial_handshake(&mut self, data: &mut BytesMut) -> Result<Self, ProtocolError> {
         if data[0] == ERR_HEADER {
             //return Err(Error::new(ErrorKind::Other, "read initial handshake error"));
@@ -183,7 +185,7 @@ impl ClientAuth {
         }
     }
 
-    // write_auth_handshake: write auth handshake.
+    // Write auth handshake.
     fn write_auth_handshake(&mut self, data: &mut BytesMut) -> Result<bool, ProtocolError> {
         let mut capability = CLIENT_PROTOCOL_41
             | CLIENT_SECURE_CONNECTION
@@ -269,6 +271,7 @@ impl ClientAuth {
         Ok(self.tls_config.is_some())
     }
 
+    // Parse handshake result
     fn decode_handshake_result(
         &mut self,
         data: &mut BytesMut,
@@ -362,6 +365,7 @@ impl ClientAuth {
     }
 }
 
+/// To make the handshake decode status clearer.
 #[derive(Debug)]
 pub enum HandshakeDecoderReturn {
     InitialHandshake(BytesMut),
@@ -374,6 +378,7 @@ pub enum HandshakeDecoderReturn {
     Other(BytesMut),
 }
 
+// Implements Decoder
 impl Decoder for ClientAuth {
     type Item = HandshakeDecoderReturn;
     type Error = ProtocolError;
@@ -560,6 +565,7 @@ pub async fn handshake(
 
                 let mut parts = framed.into_parts();
 
+                // Create tls connection
                 parts.io.make_tls().await?;
                 framed = Framed::new(parts.io, parts.codec);
 
