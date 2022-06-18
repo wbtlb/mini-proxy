@@ -21,3 +21,4 @@ mod column;
 pub mod conn;
 pub mod resultset;
 pub mod stream;
+mod column;

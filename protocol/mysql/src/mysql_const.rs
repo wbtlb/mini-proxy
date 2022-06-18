@@ -284,10 +284,10 @@ pub enum Com {
     ResetConnection,
 }
 
+
 #[cfg(test)]
 mod test {
-    use super::{ColumnFlag, ColumnType};
-
+    use super::{ColumnType, ColumnFlag};
     #[test]
     fn test_column_type() {
         let t = ColumnType::MYSQL_TYPE_DATE;
