@@ -1,4 +1,4 @@
-// Copyright 2022 Database Mesh Authors
+// Copyright 2022 SphereEx Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ pub enum ProtocolError {
     PubKey(#[from] rsa::pkcs8::spki::Error),
 
     #[error("prepare stmt return error: {0:?}")]
-    PrepareReturn(Vec<u8>),
+    PrepareError(Vec<u8>),
 
     #[error("read error packet: {0:?}")]
     PacketError(Vec<u8>),

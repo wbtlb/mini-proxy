@@ -1,4 +1,4 @@
-// Copyright 2022 Database Mesh Authors
+// Copyright 2022 SphereEx Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ use super::{err::MySQLError, stream::LocalStream};
 use crate::{charset::*, err, err::ProtocolError, mysql_const::*, server::packet::Packet, util::*};
 
 // server version start with version， regex is ^(\d{1,2})\.(\d{1,2})\.(\d{1,3})
-const SERVER_VERSION: &str = "5.7.37 mini-proxy 0.1.0";
+const SERVER_VERSION: &str = "5.7.37 pisa 0.1.0";
 
 lazy_static! {
     static ref CONNECTION_ID: AtomicU32 = AtomicU32::new(0);
@@ -144,7 +144,7 @@ impl Connection {
         if self.collation == 0 {
             self.collation = DEFAULT_COLLATION_ID;
         }
-        data.put_u8(self.collation);
+        data.put_u8(45);
 
         //status
         data.put_u8(self.status as u8);

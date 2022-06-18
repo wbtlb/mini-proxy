@@ -1,4 +1,4 @@
-// Copyright 2022 Database Mesh Authors
+// Copyright 2022 SphereEx Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ use openssl::{
 };
 
 pub fn make_pkcs12() -> (Rsa<Private>, PKey<Private>, Vec<u8>) {
-    let subject_name = "ns.mini-proxy.io";
+    let subject_name = "ns.pisa-proxy.io";
 
     let rsa_key = Rsa::generate(2048).unwrap();
     let pub_key = PKey::from_rsa(rsa_key.clone()).unwrap();
@@ -47,7 +47,7 @@ pub fn make_pkcs12() -> (Rsa<Private>, PKey<Private>, Vec<u8>) {
     let cert = builder.build();
 
     let pkcs12_builder = Pkcs12::builder();
-    let pkcs12 = pkcs12_builder.build("mini-proxy", subject_name, &pub_key, &cert).unwrap();
+    let pkcs12 = pkcs12_builder.build("pisa-proxy", subject_name, &pub_key, &cert).unwrap();
     let der = pkcs12.to_der().unwrap();
 
     (rsa_key, pub_key, der)
