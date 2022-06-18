@@ -1,5 +1,0 @@
-/root/workspaces/rust/pro/pisanix/pisa-proxy/protocol/mysql/target/rls/debug/deps/tokio_native_tls-3a44c69d41bdc10a.rmeta: /root/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-native-tls-0.3.0/src/lib.rs
-
-/root/workspaces/rust/pro/pisanix/pisa-proxy/protocol/mysql/target/rls/debug/deps/tokio_native_tls-3a44c69d41bdc10a.d: /root/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-native-tls-0.3.0/src/lib.rs
-
-/root/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-native-tls-0.3.0/src/lib.rs:
