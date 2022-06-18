@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub mod charset;
-pub mod client;
-pub mod err;
-pub mod mysql_const;
-pub mod server;
-pub mod util;
+use proc_macro::TokenStream;
 
-#[macro_use]
-extern crate lazy_static;
+mod mysql_codec;
+
+#[proc_macro_derive(mysql_codec_convert)]
+pub fn derive_mysql_codec_convert(input: TokenStream) -> TokenStream {
+    mysql_codec::derive(input)
+}
